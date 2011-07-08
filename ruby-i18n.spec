@@ -1,12 +1,11 @@
 %define pkgname i18n
 Summary:	Add Internationalization support to your Ruby application
 Name:		ruby-%{pkgname}
-Version:	0.3.5
+Version:	0.6.0
 Release:	1
 License:	MIT/Ruby License
 Source0:	http://rubygems.org/downloads/%{pkgname}-%{version}.gem
-# Source0-md5:	4c082d1c55b5998796173c86db2a8ca3
-Patch0:		%{name}-cldr-data.patch
+# Source0-md5:	fb94282dab8aadb7de15db134f8133ff
 URL:		http://rails-i18n.org/
 Group:		Development/Languages
 BuildRequires:	rpmbuild(macros) >= 1.484
@@ -50,7 +49,6 @@ Dokumentacji w formacie ri dla %{pkgname}.
 %setup -q -c
 %{__tar} xf %{SOURCE0} -O data.tar.gz | %{__tar} xz
 find -newer README.textile -o -print | xargs touch --reference %{SOURCE0}
-%patch0 -p1
 
 %build
 rdoc --ri --op ri lib
@@ -65,8 +63,6 @@ install -d $RPM_BUILD_ROOT{%{ruby_rubylibdir},%{ruby_ridir},%{ruby_rdocdir}}
 cp -a lib/* $RPM_BUILD_ROOT%{ruby_rubylibdir}
 cp -a ri/* $RPM_BUILD_ROOT%{ruby_ridir}
 cp -a rdoc $RPM_BUILD_ROOT%{ruby_rdocdir}/%{name}-%{version}
-
-cp -a vendor $RPM_BUILD_ROOT%{ruby_rubylibdir}/i18n
 
 %clean
 rm -rf $RPM_BUILD_ROOT
