@@ -2,21 +2,19 @@
 Summary:	Add Internationalization support to your Ruby application
 Name:		ruby-%{pkgname}
 Version:	0.6.0
-Release:	1
+Release:	2
 License:	MIT/Ruby License
+Group:		Development/Languages
 Source0:	http://rubygems.org/downloads/%{pkgname}-%{version}.gem
 # Source0-md5:	fb94282dab8aadb7de15db134f8133ff
 URL:		http://rails-i18n.org/
-Group:		Development/Languages
-BuildRequires:	rpmbuild(macros) >= 1.484
-BuildRequires:	ruby >= 1:1.8.6
-BuildRequires:	ruby-modules
-%{?ruby_mod_ver_requires_eq}
-#BuildArch:	noarch
+BuildRequires:	rpm-rubyprov
+BuildRequires:	rpmbuild(macros) >= 1.656
+%if %(locale -a | grep -q '^en_US$'; echo $?)
+BuildRequires:	glibc-localedb-all
+%endif
+BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
-
-# nothing to be placed there. we're not noarch only because of ruby packaging
-%define		_enable_debug_packages	0
 
 %description
 Add Internationalization support to your Ruby application.
@@ -46,23 +44,26 @@ ri documentation for %{pkgname}.
 Dokumentacji w formacie ri dla %{pkgname}.
 
 %prep
-%setup -q -c
-%{__tar} xf %{SOURCE0} -O data.tar.gz | %{__tar} xz
-find -newer README.textile -o -print | xargs touch --reference %{SOURCE0}
+%setup -q -n %{pkgname}-%{version}
 
 %build
+# UTF8 locale needed for doc generation
+export LC_ALL=en_US.UTF-8
 rdoc --ri --op ri lib
 rdoc --op rdoc lib
-rm -r ri/{Hash,KeyError,String}
+rm -r ri/{Hash,KeyError,String,Kernel,GetText}
 rm ri/created.rid
+rm ri/cache.ri
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{ruby_rubylibdir},%{ruby_ridir},%{ruby_rdocdir}}
+install -d $RPM_BUILD_ROOT{%{ruby_vendorlibdir},%{ruby_ridir},%{ruby_rdocdir}}
 
-cp -a lib/* $RPM_BUILD_ROOT%{ruby_rubylibdir}
+cp -a lib/* $RPM_BUILD_ROOT%{ruby_vendorlibdir}
 cp -a ri/* $RPM_BUILD_ROOT%{ruby_ridir}
 cp -a rdoc $RPM_BUILD_ROOT%{ruby_rdocdir}/%{name}-%{version}
+
+%{__rm} -r $RPM_BUILD_ROOT%{ruby_vendorlibdir}/i18n/tests
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -70,8 +71,8 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %doc CHANGELOG.textile README.textile
-%{ruby_rubylibdir}/%{pkgname}.rb
-%{ruby_rubylibdir}/%{pkgname}
+%{ruby_vendorlibdir}/i18n.rb
+%{ruby_vendorlibdir}/i18n
 
 %files rdoc
 %defattr(644,root,root,755)
