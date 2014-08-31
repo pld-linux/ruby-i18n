@@ -5,12 +5,12 @@
 %define pkgname i18n
 Summary:	Add Internationalization support to your Ruby application
 Name:		ruby-%{pkgname}
-Version:	0.6.0
-Release:	4
+Version:	0.6.11
+Release:	0.1
 License:	MIT/Ruby License
 Group:		Development/Languages
 Source0:	http://rubygems.org/downloads/%{pkgname}-%{version}.gem
-# Source0-md5:	fb94282dab8aadb7de15db134f8133ff
+# Source0-md5:	d414d41965c53b119341ff3b474340ae
 URL:		http://rails-i18n.org/
 BuildRequires:	rpm-rubyprov
 BuildRequires:	rpmbuild(macros) >= 1.656
@@ -82,7 +82,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc CHANGELOG.textile README.textile
+%doc README.md
 %{ruby_vendorlibdir}/i18n.rb
 %{ruby_vendorlibdir}/i18n
 %{ruby_specdir}/%{pkgname}-%{version}.gemspec
