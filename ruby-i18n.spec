@@ -6,7 +6,7 @@
 Summary:	Add Internationalization support to your Ruby application
 Name:		ruby-%{pkgname}
 Version:	1.14.8
-Release:	1
+Release:	2
 License:	MIT/Ruby License
 Group:		Development/Languages
 Source0:	http://rubygems.org/downloads/%{pkgname}-%{version}.gem
@@ -59,7 +59,6 @@ Dokumentacji w formacie ri dla %{pkgname}.
 export LC_ALL=en_US.UTF-8
 rdoc --ri --op ri lib
 rdoc --op rdoc lib
-rm -rf ri/{Hash,KeyError,String,Kernel,GetText}
 rm ri/created.rid
 rm ri/cache.ri
 %endif
@@ -75,6 +74,7 @@ cp -p %{pkgname}-%{version}.gemspec $RPM_BUILD_ROOT%{ruby_specdir}
 %if %{with doc}
 cp -a ri/* $RPM_BUILD_ROOT%{ruby_ridir}
 cp -a rdoc $RPM_BUILD_ROOT%{ruby_rdocdir}/%{name}-%{version}
+rm -r $RPM_BUILD_ROOT%{ruby_ridir}/GetText
 %endif
 
 %clean
