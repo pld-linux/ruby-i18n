@@ -6,7 +6,7 @@
 Summary:	Add Internationalization support to your Ruby application
 Name:		ruby-%{pkgname}
 Version:	1.14.8
-Release:	2
+Release:	3
 License:	MIT/Ruby License
 Group:		Development/Languages
 Source0:	http://rubygems.org/downloads/%{pkgname}-%{version}.gem
